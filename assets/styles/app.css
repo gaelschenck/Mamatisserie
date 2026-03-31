@@ -91,3 +91,19 @@
 .theme-dot[data-theme="chocolat"]    { background: #6B3A2A; }
 .theme-dot[data-theme="gourmande"]   { background: #C0345A; }
 
+/* ============================================================
+   TYPOGRAPHIE — Cormorant Garamond pour les titres publics
+   ============================================================ */
+
+h1, h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Le logo dans la navbar utilise aussi la police */
+.site-logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
