@@ -101,9 +101,9 @@ h1, h2 {
 
 /* Le logo dans la navbar utilise aussi la police */
 .site-logo {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
