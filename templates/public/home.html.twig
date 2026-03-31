@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les Délices de Chloé{% endblock %}
+
+{% block body %}
+
+{# ── HEADER / NAV ─────────────────────────────────────────── #}
+{% include 'components/navbar.html.twig' %}
+
+{# ── HERO ─────────────────────────────────────────────────── #}
+<section class="relative flex items-center justify-center min-h-[70vh] overflow-hidden px-6"
+         style="background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-accent) 60%, var(--color-secondary) 100%);">
+    <div class="text-center max-w-2xl z-10">
+        <h1 class="text-5xl sm:text-6xl font-bold leading-tight mb-4"
+            style="color: var(--color-primary-dark);">
+            Les Délices<br>de Chloé
+        </h1>
+        <p class="text-lg sm:text-xl mb-8 opacity-70" style="color: var(--color-text);">
+            Pâtissière passionnée — créations artisanales faites avec amour
+        </p>
+        <div class="flex flex-wrap gap-3 justify-center">
+            {% for category in categories %}
+                <a href="{{ path('app_category', {slug: category.slug}) }}"
+                   class="btn-primary px-6 py-3 rounded-full text-sm font-semibold">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+            <a href="{{ path('app_contact') }}"
+               class="px-6 py-3 rounded-full text-sm font-semibold border-2 transition-all"
+               style="border-color: var(--color-primary); color: var(--color-primary);">
+                Me contacter
+            </a>
+        </div>
+    </div>
+</section>
+
+{# ── COUPS DE CŒUR ───────────────────────────────────────── #}
+{% if featured is not empty %}
+<section class="max-w-6xl mx-auto px-4 py-16">
+    <h2 class="text-2xl font-bold mb-2" style="color: var(--color-primary-dark);">
+        ✨ Coups de cœur
+    </h2>
+    <p class="text-sm mb-8 opacity-60" style="color: var(--color-text);">
+        Mes créations du moment
+    </p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for product in featured %}
+            {% include 'components/product_card.html.twig' with {product: product} %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{# ── CATÉGORIES ───────────────────────────────────────────── #}
+<section class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-2xl font-bold mb-8" style="color: var(--color-primary-dark);">
+        Découvrez mes univers
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for category in categories %}
+        <a href="{{ path('app_category', {slug: category.slug}) }}"
+           class="card p-6 flex items-center gap-4 no-underline"
+           style="background: var(--color-surface);">
+            <span class="text-3xl">🍰</span>
+            <div>
+                <h3 class="font-bold" style="color: var(--color-primary-dark);">{{ category.name }}</h3>
+                <p class="text-sm opacity-60" style="color: var(--color-text);">Voir les créations →</p>
+            </div>
+        </a>
+        {% else %}
+            <p class="opacity-50" style="color: var(--color-text);">Aucune catégorie pour le moment.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{# ── FOOTER ───────────────────────────────────────────────── #}
+{% include 'components/footer.html.twig' %}
+
+{# ── MODALE PRODUIT ───────────────────────────────────────── #}
+{% include 'components/product_modal.html.twig' %}
+
+{% endblock %}

@@ -36,9 +36,9 @@ class AdminUsersFixture extends Fixture
             'password' => 'MotDePasseChloe123!',     // Son mot de passe initial
         ],
         [
-            'username' => 'gael',                   // Ton identifiant
-            'email'    => 'gael@example.com',        // Ton adresse email
-            'password' => 'MotDePasseGael123!',      // Ton mot de passe initial
+            'username' => 'micheline',                   // Ton identifiant
+            'email'    => 'gaelschenck@hotmail.fr',        // Ton adresse email
+            'password' => 'micheline123!',      // Ton mot de passe initial
         ],
     ];
 

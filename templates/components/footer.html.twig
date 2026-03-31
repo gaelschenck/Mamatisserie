@@ -1,0 +1,26 @@
+<footer class="mt-16 border-t text-sm" style="border-color: var(--color-secondary); color: var(--color-text);">
+    <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+
+        {# ── Identité ──────────────────────────────────────────── #}
+        <div class="text-center md:text-left">
+            <p class="font-bold text-base" style="color: var(--color-primary-dark);">
+                Les Délices de Chloé
+            </p>
+            <p class="mt-1 opacity-50 text-xs">Pâtisserie &amp; Chocolaterie artisanale</p>
+        </div>
+
+        {# ── Liens ─────────────────────────────────────────────── #}
+        <nav class="flex flex-wrap justify-center gap-5 text-xs font-medium">
+            <a href="{{ path('app_home') }}" class="hover:opacity-70 transition-opacity">Accueil</a>
+            <a href="{{ path('app_about') }}" class="hover:opacity-70 transition-opacity">À propos</a>
+            <a href="{{ path('app_contact') }}" class="hover:opacity-70 transition-opacity">Contact</a>
+            <a href="{{ path('app_legal') }}" class="hover:opacity-70 transition-opacity">Mentions légales</a>
+        </nav>
+
+        {# ── Copyright ─────────────────────────────────────────── #}
+        <p class="opacity-40 text-xs text-center">
+            &copy; {{ "now" | date("Y") }} Les Délices de Chloé
+        </p>
+
+    </div>
+</footer>

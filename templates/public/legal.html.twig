@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales — Les Délices de Chloé{% endblock %}
+{% block meta_description %}Mentions légales du site Les Délices de Chloé.{% endblock %}
+
+{% block body %}
+
+{% include 'components/navbar.html.twig' %}
+
+<div class="max-w-3xl mx-auto px-4 py-14">
+
+    <h1 class="text-3xl font-bold mb-10" style="color: var(--color-primary-dark);">
+        Mentions légales
+    </h1>
+
+    <div class="space-y-8 text-sm leading-relaxed" style="color: var(--color-text);">
+
+        <section>
+            <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
+                Éditeur du site
+            </h2>
+            <p>
+                Ce site est édité par Chloé [NOM DE FAMILLE],<br>
+                artisane pâtissière-chocolatière indépendante.<br>
+                Adresse : [ADRESSE]<br>
+                E-mail : [EMAIL DE CONTACT]<br>
+                Siret : [NUMÉRO SIRET]
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
+                Hébergement
+            </h2>
+            <p>
+                Ce site est hébergé par :<br>
+                Freebox (Iliad / Free SAS)<br>
+                8, rue de la Ville l'Évêque, 75008 Paris
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
+                Propriété intellectuelle
+            </h2>
+            <p>
+                Toutes les photographies, textes et créations présentés sur ce site sont la propriété exclusive
+                de leur autrice. Toute reproduction, même partielle, est interdite sans autorisation préalable.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
+                Données personnelles
+            </h2>
+            <p>
+                Les informations transmises via le formulaire de contact sont utilisées uniquement pour
+                répondre à votre demande et ne sont pas conservées au-delà de cette finalité.
+                Aucun fichier client n'est constitué. Aucun cookie de tracking n'est déposé.
+            </p>
+            <p class="mt-2">
+                Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et
+                de suppression de vos données. Pour l'exercer, contactez :
+                <a href="{{ path('app_contact') }}"
+                   class="underline hover:opacity-70"
+                   style="color: var(--color-primary);">le formulaire de contact</a>.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
+                Cookies
+            </h2>
+            <p>
+                Ce site utilise un seul cookie de préférence locale (thème visuel choisi par l'utilisateur).
+                Ce cookie ne contient aucune donnée personnelle et n'est pas transmis à des tiers.
+            </p>
+        </section>
+
+    </div>
+
+    <div class="mt-12 text-center">
+        <a href="{{ path('app_home') }}"
+           class="text-sm underline hover:opacity-70"
+           style="color: var(--color-primary);">
+            ← Retour à l'accueil
+        </a>
+    </div>
+
+</div>
+
+{% include 'components/footer.html.twig' %}
+
+{% endblock %}

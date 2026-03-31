@@ -1,0 +1,117 @@
+{#
+  Composant : modale lightbox produit
+  Fonctionne avec openProductModal(el) depuis product_card.html.twig
+  CSRF token pour l'appel AJAX compteur de vues
+#}
+
+<div id="product-modal"
+     class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="modal-product-name"
+     onclick="closeProductModal(event)">
+
+    {# Fond semi-transparent #}
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+    {# Contenu #}
+    <div class="relative z-10 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl"
+         style="background: var(--color-bg);"
+         onclick="event.stopPropagation()">
+
+        {# Bouton fermer #}
+        <button onclick="closeProductModal()"
+                class="absolute top-3 right-3 z-20 w-9 h-9 flex items-center justify-center rounded-full text-white bg-black/40 hover:bg-black/60 transition-all"
+                aria-label="Fermer">
+            ✕
+        </button>
+
+        {# Photo agrandie #}
+        <div id="modal-photo-wrap" class="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden">
+            <img id="modal-photo"
+                 src=""
+                 alt=""
+                 class="w-full h-full object-cover hidden">
+            <div id="modal-photo-placeholder"
+                 class="w-full h-full flex items-center justify-center text-6xl opacity-20">
+                🍰
+            </div>
+        </div>
+
+        {# Infos #}
+        <div class="px-6 py-5">
+            <h2 id="modal-product-name"
+                class="text-xl font-bold mb-2"
+                style="color: var(--color-primary-dark);">
+            </h2>
+            <p id="modal-product-description"
+               class="text-sm leading-relaxed whitespace-pre-line"
+               style="color: var(--color-text);">
+            </p>
+
+            <div class="mt-5 flex justify-end">
+                <a id="modal-contact-link"
+                   href="#"
+                   class="btn-primary px-5 py-2.5 rounded-full text-sm font-medium transition-all hover:opacity-90">
+                    ✉️ Me contacter pour cette création
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const _csrfViewToken = '{{ csrf_token('product_view') }}';
+
+function openProductModal(el) {
+    const id          = el.dataset.productId;
+    const name        = el.dataset.productName;
+    const description = el.dataset.productDescription;
+    const photo       = el.dataset.productPhoto;
+    const contactUrl  = el.dataset.productContact;
+
+    document.getElementById('modal-product-name').textContent        = name;
+    document.getElementById('modal-product-description').textContent = description;
+    document.getElementById('modal-contact-link').href               = contactUrl;
+
+    const img = document.getElementById('modal-photo');
+    const placeholder = document.getElementById('modal-photo-placeholder');
+
+    if (photo) {
+        img.src = photo;
+        img.alt = name;
+        img.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+    } else {
+        img.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+    }
+
+    document.getElementById('product-modal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    // Compteur de vues (AJAX, silencieux)
+    fetch('/produit/' + id + '/vue', {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: '_csrf_token=' + encodeURIComponent(_csrfViewToken)
+    }).catch(() => {});
+}
+
+function closeProductModal(event) {
+    if (event && event.target !== document.getElementById('product-modal')) return;
+    document.getElementById('product-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.getElementById('product-modal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+});
+</script>

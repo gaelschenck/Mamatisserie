@@ -1,0 +1,118 @@
+{#
+  Composant : navbar publique
+  Utilise la fonction Twig all_categories() (AppExtension) — aucune variable à passer.
+#}
+
+<header class="sticky top-0 z-40 border-b"
+        style="background: var(--color-bg); border-color: var(--color-secondary);">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
+
+        {# ── Logo / Nom ──────────────────────────────────────── #}
+        <a href="{{ path('app_home') }}"
+           class="text-xl font-bold tracking-wide hover:opacity-80 transition-opacity"
+           style="color: var(--color-primary-dark);">
+            Les Délices de Chloé
+        </a>
+
+        {# ── Navigation desktop ──────────────────────────────── #}
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium"
+             style="color: var(--color-text);">
+            {% for cat in all_categories() %}
+            <a href="{{ path('app_category', {slug: cat.slug}) }}"
+               class="hover:opacity-70 transition-opacity">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+            <a href="{{ path('app_about') }}"
+               class="hover:opacity-70 transition-opacity">
+                À propos
+            </a>
+            <a href="{{ path('app_contact') }}"
+               class="hover:opacity-70 transition-opacity">
+                Contact
+            </a>
+        </nav>
+
+        {# ── Actions droite ──────────────────────────────────── #}
+        <div class="flex items-center gap-3">
+
+            {# Sélecteur de thème (4 pastilles) #}
+            <div class="theme-switcher hidden sm:flex items-center gap-2 p-1.5 rounded-full border"
+                 style="border-color: var(--color-secondary);">
+                <button onclick="setTheme('lagune')"
+                        title="Thème Lagune"
+                        class="theme-dot w-5 h-5 rounded-full transition-transform hover:scale-110"
+                        style="background: #0e9a9a;"
+                        aria-label="Thème Lagune"></button>
+                <button onclick="setTheme('boulangerie')"
+                        title="Thème Boulangerie"
+                        class="theme-dot w-5 h-5 rounded-full transition-transform hover:scale-110"
+                        style="background: #c97d2e;"
+                        aria-label="Thème Boulangerie"></button>
+                <button onclick="setTheme('chocolat')"
+                        title="Thème Chocolat"
+                        class="theme-dot w-5 h-5 rounded-full transition-transform hover:scale-110"
+                        style="background: #5c3317;"
+                        aria-label="Thème Chocolat"></button>
+                <button onclick="setTheme('gourmande')"
+                        title="Thème Gourmande"
+                        class="theme-dot w-5 h-5 rounded-full transition-transform hover:scale-110"
+                        style="background: #6f9e3a;"
+                        aria-label="Thème Gourmande"></button>
+            </div>
+
+            {# Burger mobile #}
+            <button id="menu-toggle"
+                    class="md:hidden w-9 h-9 flex flex-col justify-center items-center gap-1.5 rounded-xl transition-all"
+                    aria-label="Menu"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu"
+                    onclick="toggleMobileMenu()">
+                <span class="block w-5 h-0.5 transition-all" style="background: var(--color-text);"></span>
+                <span class="block w-5 h-0.5 transition-all" style="background: var(--color-text);"></span>
+                <span class="block w-5 h-0.5 transition-all" style="background: var(--color-text);"></span>
+            </button>
+        </div>
+    </div>
+
+    {# ── Menu mobile ─────────────────────────────────────────── #}
+    <nav id="mobile-menu"
+         class="md:hidden hidden pb-4 px-4 border-t"
+         style="border-color: var(--color-secondary);">
+        <div class="flex flex-col gap-3 pt-4 text-sm font-medium" style="color: var(--color-text);">
+            {% for cat in all_categories() %}
+            <a href="{{ path('app_category', {slug: cat.slug}) }}"
+               class="hover:opacity-70 transition-opacity">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+            <a href="{{ path('app_about') }}"
+               class="hover:opacity-70 transition-opacity">
+                À propos
+            </a>
+            <a href="{{ path('app_contact') }}"
+               class="hover:opacity-70 transition-opacity">
+                Contact
+            </a>
+            {# Pastilles de thème en mobile #}
+            <div class="flex items-center gap-3 pt-2">
+                <span class="text-xs opacity-50">Thème :</span>
+                <button onclick="setTheme('lagune')"  class="w-5 h-5 rounded-full" style="background:#0e9a9a;" title="Lagune"></button>
+                <button onclick="setTheme('boulangerie')" class="w-5 h-5 rounded-full" style="background:#c97d2e;" title="Boulangerie"></button>
+                <button onclick="setTheme('chocolat')" class="w-5 h-5 rounded-full" style="background:#5c3317;" title="Chocolat"></button>
+                <button onclick="setTheme('gourmande')" class="w-5 h-5 rounded-full" style="background:#6f9e3a;" title="Gourmande"></button>
+            </div>
+        </div>
+    </nav>
+
+</header>
+
+<script>
+function toggleMobileMenu() {
+    const menu   = document.getElementById('mobile-menu');
+    const toggle = document.getElementById('menu-toggle');
+    const isOpen = !menu.classList.contains('hidden');
+    menu.classList.toggle('hidden', isOpen);
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+}
+</script>

@@ -195,6 +195,28 @@ Description de chaque controller, ses routes et ses responsabilités.
 
 ---
 
+### `Admin\UserController`
+
+**Rôle** : Gestion des deux comptes administrateurs (consultation et édition des informations hors mot de passe).
+
+| Route                        | Méthode  | Nom de route        | Description                                                            |
+|------------------------------|----------|---------------------|------------------------------------------------------------------------|
+| `/admin/utilisateurs`        | GET      | `admin_user_index`  | Liste les 2 comptes admin (username, email)                            |
+| `/admin/utilisateurs/{id}/edit` | GET/POST | `admin_user_edit` | Formulaire d'édition du username et de l'email d'un compte             |
+
+**Règles métier** :
+- Tout admin connecté peut modifier **les deux comptes** (le sien et l'autre).
+- Seuls le **username** et l'**email** sont modifiables ici.
+- Le mot de passe ne peut être changé que via le flux "mot de passe oublié" depuis la page de login.
+- Unicité username et email vérifiée à la soumission.
+- Protection CSRF activée.
+
+**Templates associés** :
+- `templates/admin/user/index.html.twig`
+- `templates/admin/user/edit.html.twig`
+
+---
+
 ### `Admin\AboutController`
 
 **Rôle** : Édition du contenu de la page "À propos" (singleton).

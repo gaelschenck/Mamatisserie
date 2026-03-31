@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }} — Les Délices de Chloé{% endblock %}
+{% block meta_description %}Découvrez mes créations : {{ category.name }}{% if category.metaDescription %} — {{ category.metaDescription }}{% endif %}{% endblock %}
+
+{% block body %}
+
+{% include 'components/navbar.html.twig' %}
+
+<div class="max-w-6xl mx-auto px-4 py-10">
+
+    {# ── TITRE ─────────────────────────────────────────────── #}
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold" style="color: var(--color-primary-dark);">
+            {{ category.name }}
+        </h1>
+        {% if category.metaDescription %}
+            <p class="mt-2 text-sm opacity-60" style="color: var(--color-text);">{{ category.metaDescription }}</p>
+        {% endif %}
+    </div>
+
+    {# ── FILTRE SOUS-CATÉGORIES ────────────────────────────── #}
+    {% if subCategories is not empty %}
+    <div class="flex flex-wrap gap-2 mb-8">
+        <a href="{{ path('app_category', {slug: category.slug}) }}"
+           class="px-4 py-2 rounded-full text-sm font-medium transition-all {{ activeSubId is null ? 'btn-primary' : 'border' }}"
+           style="{{ activeSubId is null ? '' : 'border-color: var(--color-secondary); color: var(--color-text);' }}">
+            Tout voir
+        </a>
+        {% for sub in subCategories %}
+        <a href="{{ path('app_category', {slug: category.slug, 'sous-categorie': sub.id}) }}"
+           class="px-4 py-2 rounded-full text-sm font-medium transition-all {{ activeSubId == sub.id ? 'btn-primary' : 'border' }}"
+           style="{{ activeSubId == sub.id ? '' : 'border-color: var(--color-secondary); color: var(--color-text);' }}">
+            {{ sub.name }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# ── GRILLE PRODUITS ───────────────────────────────────── #}
+    {% if products is not empty %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for product in products %}
+            {% include 'components/product_card.html.twig' with {product: product} %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 opacity-40" style="color: var(--color-text);">
+        <p class="text-4xl mb-4">🍰</p>
+        <p>Aucune création dans cette catégorie pour le moment.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+{% include 'components/footer.html.twig' %}
+{% include 'components/product_modal.html.twig' %}
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos — Les Délices de Chloé{% endblock %}
+{% block meta_description %}Découvrez mon histoire, ma passion pour la pâtisserie et la chocolaterie artisanale.{% endblock %}
+
+{% block body %}
+
+{% include 'components/navbar.html.twig' %}
+
+<div class="max-w-4xl mx-auto px-4 py-14">
+
+    {% if about %}
+
+    {# ── Photo + texte ─────────────────────────────────────── #}
+    <div class="flex flex-col md:flex-row gap-10 items-center md:items-start">
+
+        {% if about.photo %}
+        <div class="w-56 h-56 md:w-72 md:h-72 flex-shrink-0 rounded-full overflow-hidden shadow-lg ring-4"
+             style="ring-color: var(--color-secondary);">
+            <img src="/uploads/about/{{ about.photo }}"
+                 alt="{{ about.title }}"
+                 class="w-full h-full object-cover">
+        </div>
+        {% endif %}
+
+        <div class="flex-1">
+            <h1 class="text-3xl font-bold mb-4" style="color: var(--color-primary-dark);">
+                {{ about.title }}
+            </h1>
+            <div class="prose max-w-none leading-relaxed text-base"
+                 style="color: var(--color-text);">
+                {{ about.text | nl2br }}
+            </div>
+
+            <a href="{{ path('app_contact') }}"
+               class="btn-primary inline-block mt-8 px-6 py-3 rounded-full font-medium transition-all hover:opacity-90">
+                ✉️ Me contacter
+            </a>
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="text-center py-24 opacity-40" style="color: var(--color-text);">
+        <p class="text-5xl mb-4">👩‍🍳</p>
+        <p>Page en cours de construction.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% include 'components/footer.html.twig' %}
+
+{% endblock %}

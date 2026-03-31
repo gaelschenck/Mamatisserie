@@ -1,0 +1,56 @@
+{#
+  Composant : carte produit
+  Variables attendues :
+    - product (App\Entity\Product)
+#}
+
+<article
+    class="card group cursor-pointer rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+    style="background: var(--color-bg-alt);"
+    data-product-id="{{ product.id }}"
+    data-product-name="{{ product.name | e('html_attr') }}"
+    data-product-description="{{ product.description | e('html_attr') }}"
+    data-product-photo="{{ product.photo ? '/uploads/products/' ~ product.photo : '' }}"
+    data-product-contact="{{ path('app_contact', {'produit': product.id}) }}"
+    onclick="openProductModal(this)"
+    role="button"
+    tabindex="0"
+    aria-label="Voir {{ product.name }}"
+    onkeydown="if(event.key==='Enter'||event.key===' ')openProductModal(this)">
+
+    {# ── Photo ─────────────────────────────────────────────── #}
+    <div class="relative aspect-square overflow-hidden bg-gray-100">
+        {% if product.photo %}
+        <img
+            src="/uploads/products/{{ product.photo }}"
+            alt="{{ product.name }}"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy">
+        {% else %}
+        <div class="w-full h-full flex items-center justify-center text-4xl opacity-20">
+            🍰
+        </div>
+        {% endif %}
+
+        {# Badge "Coup de cœur" #}
+        {% if product.isFeatured %}
+        <span class="absolute top-2 left-2 text-xs font-semibold px-2 py-1 rounded-full text-white"
+              style="background: var(--color-primary);">
+            ♥ Coup de cœur
+        </span>
+        {% endif %}
+    </div>
+
+    {# ── Infos ─────────────────────────────────────────────── #}
+    <div class="px-3 py-3">
+        <h3 class="text-sm font-semibold truncate" style="color: var(--color-text);">
+            {{ product.name }}
+        </h3>
+        {% if product.subCategory %}
+        <p class="text-xs mt-0.5 opacity-50 truncate" style="color: var(--color-text);">
+            {{ product.subCategory.name }}
+        </p>
+        {% endif %}
+    </div>
+
+</article>
