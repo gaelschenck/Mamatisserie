@@ -1,0 +1,137 @@
+{% extends 'admin/base_admin.html.twig' %}
+{% block title %}Produits{% endblock %}
+
+{% block main %}
+
+{# ── En-tête ──────────────────────────────────────────────────── #}
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <h1 class="text-xl font-bold" style="color: var(--color-primary-dark);">🍰 Produits</h1>
+    <a href="{{ path('admin_product_new') }}"
+       class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold">
+        + Nouveau produit
+    </a>
+</div>
+
+{# ── Filtres ──────────────────────────────────────────────────── #}
+<form method="get" action="{{ path('admin_product_index') }}"
+      class="flex flex-wrap gap-3 mb-6">
+    <input type="text" name="q" value="{{ searchQuery }}"
+           placeholder="Rechercher un produit…"
+           class="rounded-xl border px-4 py-2.5 text-sm outline-none flex-1 min-w-44"
+           style="border-color: var(--color-secondary); background: var(--color-bg-alt); color: var(--color-text);">
+    <select name="categorie"
+            class="rounded-xl border px-4 py-2.5 text-sm outline-none"
+            style="border-color: var(--color-secondary); background: var(--color-bg-alt); color: var(--color-text);">
+        <option value="">Toutes les catégories</option>
+        {% for cat in categories %}
+        <option value="{{ cat.id }}" {{ categoryId == cat.id ? 'selected' : '' }}>
+            {{ cat.name }}
+        </option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold">
+        Filtrer
+    </button>
+    {% if searchQuery or categoryId %}
+    <a href="{{ path('admin_product_index') }}"
+       class="px-5 py-2.5 rounded-xl text-sm border hover:opacity-70"
+       style="border-color: var(--color-secondary); color: var(--color-text);">
+        Réinitialiser
+    </a>
+    {% endif %}
+</form>
+
+{# ── Liste ────────────────────────────────────────────────────── #}
+{% if pagination.totalItemCount == 0 %}
+<div class="text-center py-16 opacity-40 text-sm" style="color: var(--color-text);">
+    Aucun produit trouvé.
+</div>
+{% else %}
+
+<div class="rounded-2xl border overflow-x-auto" style="border-color: var(--color-secondary);">
+    <table class="w-full text-sm min-w-[640px]">
+        <thead style="background: var(--color-bg-alt);">
+            <tr class="text-left">
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Photo</th>
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Nom</th>
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Catégorie</th>
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Visible</th>
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">❤️</th>
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Vues</th>
+                <th class="px-4 py-3"></th>
+            </tr>
+        </thead>
+        <tbody class="divide-y" style="divide-color: var(--color-secondary);">
+            {% for product in pagination %}
+            <tr style="color: var(--color-text);">
+                <td class="px-4 py-2.5">
+                    {% if product.photo %}
+                    <img src="/uploads/products/{{ product.photo }}" alt=""
+                         class="w-10 h-10 rounded-lg object-cover">
+                    {% else %}
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+                         style="background: var(--color-bg-alt);">🍰</div>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-2.5 font-medium max-w-[180px] truncate">{{ product.name }}</td>
+                <td class="px-4 py-2.5 opacity-60">
+                    {{ product.category.name }}
+                    {% if product.subCategory %}
+                    <span class="opacity-50"> / {{ product.subCategory.name }}</span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-2.5">
+                    {# Toggle visibilité #}
+                    <form method="post"
+                          action="{{ path('admin_product_toggle', {id: product.id, field: 'visible'}) ~ '?' ~ app.request.queryString }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_product_' ~ product.id) }}">
+                        <button type="submit"
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium transition-all
+                                       {{ product.isVisible ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-600 hover:bg-red-200' }}"
+                                title="Cliquer pour basculer">
+                            {{ product.isVisible ? '✓ Oui' : '✗ Non' }}
+                        </button>
+                    </form>
+                </td>
+                <td class="px-4 py-2.5">
+                    {# Toggle coup de cœur #}
+                    <form method="post"
+                          action="{{ path('admin_product_toggle', {id: product.id, field: 'featured'}) ~ '?' ~ app.request.queryString }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_product_' ~ product.id) }}">
+                        <button type="submit"
+                                class="text-lg transition-all {{ product.isFeatured ? '' : 'opacity-20 hover:opacity-60' }}"
+                                title="{{ product.isFeatured ? 'Retirer des coups de cœur' : 'Ajouter aux coups de cœur' }}">
+                            ♥
+                        </button>
+                    </form>
+                </td>
+                <td class="px-4 py-2.5 opacity-50 text-xs">{{ product.viewCount }}</td>
+                <td class="px-4 py-2.5 text-right space-x-3 whitespace-nowrap">
+                    <a href="{{ path('admin_product_edit', {id: product.id}) }}"
+                       class="text-xs underline hover:opacity-70">Modifier</a>
+                    <form method="post"
+                          action="{{ path('admin_product_delete', {id: product.id}) }}"
+                          class="inline"
+                          onsubmit="return confirm('Supprimer « {{ product.name }} » ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_product_' ~ product.id) }}">
+                        <button type="submit" class="text-xs text-red-500 underline hover:opacity-70">
+                            Supprimer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{# ── Pagination ───────────────────────────────────────────────── #}
+{% if pagination.pageCount > 1 %}
+<div class="flex justify-center gap-2 mt-6 text-sm">
+    {{ knp_pagination_render(pagination) }}
+</div>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

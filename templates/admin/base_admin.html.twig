@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="lagune">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} — Les Délices de Chloé</title>
+    <link rel="stylesheet" href="/assets/app.css">
+    <meta name="robots" content="noindex, nofollow">
+    <script>
+        // Restaure le thème immédiatement (avant affichage) pour éviter le flash
+        (function() {
+            const t = localStorage.getItem('theme');
+            if (t) document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+</head>
+<body style="background: var(--color-bg); color: var(--color-text); min-height: 100vh;">
+
+{# ── SIDEBAR / HEADER ADMIN ─────────────────────────────────────── #}
+<div class="flex min-h-screen">
+
+    {# Sidebar desktop #}
+    <aside id="admin-sidebar"
+           class="hidden md:flex flex-col w-56 flex-shrink-0 border-r min-h-screen sticky top-0 h-screen overflow-y-auto"
+           style="background: var(--color-bg-alt); border-color: var(--color-secondary);">
+
+        {# Logo #}
+        <div class="px-5 py-5 border-b" style="border-color: var(--color-secondary);">
+            <a href="{{ path('admin_dashboard') }}"
+               class="text-base font-bold block hover:opacity-80 transition-opacity"
+               style="color: var(--color-primary-dark);">
+                🎂 Admin Chloé
+            </a>
+            <p class="text-xs mt-1 opacity-40">{{ app.user ? app.user.username : '' }}</p>
+        </div>
+
+        {# Navigation #}
+        <nav class="flex flex-col py-4 flex-1 text-sm font-medium gap-0.5 px-2">
+
+            {% set currentRoute = app.request.attributes.get('_route') %}
+
+            <a href="{{ path('admin_dashboard') }}"
+               class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all
+                      {{ currentRoute == 'admin_dashboard' ? 'btn-primary' : 'hover:opacity-70' }}"
+               style="{{ currentRoute != 'admin_dashboard' ? 'color: var(--color-text);' : '' }}">
+                📊 Tableau de bord
+            </a>
+
+            <p class="px-3 pt-3 pb-1 text-xs uppercase tracking-wider opacity-40">Catalogue</p>
+
+            <a href="{{ path('admin_product_index') }}"
+               class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all
+                      {{ currentRoute starts with 'admin_product' ? 'btn-primary' : 'hover:opacity-70' }}"
+               style="{{ not (currentRoute starts with 'admin_product') ? 'color: var(--color-text);' : '' }}">
+                🍰 Produits
+            </a>
+
+            <a href="{{ path('admin_category_index') }}"
+               class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all
+                      {{ currentRoute starts with 'admin_category' ? 'btn-primary' : 'hover:opacity-70' }}"
+               style="{{ not (currentRoute starts with 'admin_category') ? 'color: var(--color-text);' : '' }}">
+                🗂️ Catégories
+            </a>
+
+            <a href="{{ path('admin_subcategory_index') }}"
+               class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all
+                      {{ currentRoute starts with 'admin_subcategory' ? 'btn-primary' : 'hover:opacity-70' }}"
+               style="{{ not (currentRoute starts with 'admin_subcategory') ? 'color: var(--color-text);' : '' }}">
+                🏷️ Sous-catégories
+            </a>
+
+            <p class="px-3 pt-3 pb-1 text-xs uppercase tracking-wider opacity-40">Site</p>
+
+            <a href="{{ path('admin_about_edit') }}"
+               class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all
+                      {{ currentRoute starts with 'admin_about' ? 'btn-primary' : 'hover:opacity-70' }}"
+               style="{{ not (currentRoute starts with 'admin_about') ? 'color: var(--color-text);' : '' }}">
+                👩‍🍳 À propos
+            </a>
+
+            <a href="{{ path('admin_user_index') }}"
+               class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all
+                      {{ currentRoute starts with 'admin_user' ? 'btn-primary' : 'hover:opacity-70' }}"
+               style="{{ not (currentRoute starts with 'admin_user') ? 'color: var(--color-text);' : '' }}">
+                👤 Comptes
+            </a>
+
+        </nav>
+
+        {# Footer sidebar #}
+        <div class="px-4 py-4 border-t text-xs space-y-2" style="border-color: var(--color-secondary);">
+            <a href="{{ path('app_home') }}" target="_blank"
+               class="flex items-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity">
+                🌐 Voir le site
+            </a>
+            <a href="{{ path('app_logout') }}"
+               class="flex items-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity">
+                🚪 Déconnexion
+            </a>
+        </div>
+
+    </aside>
+
+    {# Zone principale #}
+    <div class="flex-1 flex flex-col min-w-0">
+
+        {# Header mobile #}
+        <header class="md:hidden flex items-center justify-between px-4 py-3 border-b sticky top-0 z-30"
+                style="background: var(--color-bg-alt); border-color: var(--color-secondary);">
+            <a href="{{ path('admin_dashboard') }}"
+               class="font-bold text-sm" style="color: var(--color-primary-dark);">
+                🎂 Admin
+            </a>
+            <button onclick="document.getElementById('mobile-nav').classList.toggle('hidden')"
+                    class="w-9 h-9 flex flex-col justify-center items-center gap-1 rounded-xl"
+                    aria-label="Menu">
+                <span class="w-5 h-0.5" style="background: var(--color-text);"></span>
+                <span class="w-5 h-0.5" style="background: var(--color-text);"></span>
+                <span class="w-5 h-0.5" style="background: var(--color-text);"></span>
+            </button>
+        </header>
+
+        {# Menu mobile déroulant #}
+        <nav id="mobile-nav"
+             class="md:hidden hidden px-4 py-3 border-b text-sm font-medium space-y-1"
+             style="background: var(--color-bg-alt); border-color: var(--color-secondary);">
+            <a href="{{ path('admin_dashboard') }}" class="block py-2" style="color: var(--color-text);">📊 Tableau de bord</a>
+            <a href="{{ path('admin_product_index') }}" class="block py-2" style="color: var(--color-text);">🍰 Produits</a>
+            <a href="{{ path('admin_category_index') }}" class="block py-2" style="color: var(--color-text);">🗂️ Catégories</a>
+            <a href="{{ path('admin_subcategory_index') }}" class="block py-2" style="color: var(--color-text);">🏷️ Sous-catégories</a>
+            <a href="{{ path('admin_about_edit') }}" class="block py-2" style="color: var(--color-text);">👩‍🍳 À propos</a>
+            <a href="{{ path('admin_user_index') }}" class="block py-2" style="color: var(--color-text);">👤 Comptes</a>
+            <hr style="border-color: var(--color-secondary);">
+            <a href="{{ path('app_home') }}" target="_blank" class="block py-2 opacity-50">🌐 Voir le site</a>
+            <a href="{{ path('app_logout') }}" class="block py-2 opacity-50">🚪 Déconnexion</a>
+        </nav>
+
+        {# Flash messages #}
+        <div class="px-6 pt-4 space-y-2">
+            {% for msg in app.flashes('success') %}
+            <div class="rounded-xl px-4 py-3 text-sm font-medium text-green-800 bg-green-50 border border-green-200">
+                ✅ {{ msg }}
+            </div>
+            {% endfor %}
+            {% for msg in app.flashes('error') %}
+            <div class="rounded-xl px-4 py-3 text-sm font-medium text-red-800 bg-red-50 border border-red-200">
+                ❌ {{ msg }}
+            </div>
+            {% endfor %}
+        </div>
+
+        {# Contenu de la page #}
+        <main class="flex-1 px-4 md:px-8 py-6">
+            {% block main %}{% endblock %}
+        </main>
+
+    </div>
+</div>
+
+</body>
+</html>

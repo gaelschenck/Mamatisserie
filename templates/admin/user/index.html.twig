@@ -1,0 +1,38 @@
+{% extends 'admin/base_admin.html.twig' %}
+{% block title %}Comptes administrateurs{% endblock %}
+
+{% block main %}
+
+<div class="mb-6">
+    <h1 class="text-xl font-bold" style="color: var(--color-primary-dark);">👤 Comptes administrateurs</h1>
+    <p class="text-sm mt-1 opacity-50">
+        Pour modifier le mot de passe, utilisez le lien
+        <a href="{{ path('app_forgot_password_request') }}" class="underline">"Mot de passe oublié"</a>.
+    </p>
+</div>
+
+<div class="max-w-2xl space-y-4">
+    {% for user in users %}
+    <div class="rounded-2xl border p-5 flex items-center justify-between gap-4"
+         style="border-color: var(--color-secondary); background: var(--color-bg-alt);">
+        <div>
+            <p class="font-semibold" style="color: var(--color-primary-dark);">
+                {{ user.username }}
+                {% if user.id == app.user.id %}
+                <span class="text-xs px-2 py-0.5 rounded-full ml-1"
+                      style="background: var(--color-primary); color: #fff;">
+                    Vous
+                </span>
+                {% endif %}
+            </p>
+            <p class="text-sm mt-0.5 opacity-50">{{ user.email }}</p>
+        </div>
+        <a href="{{ path('admin_user_edit', {id: user.id}) }}"
+           class="btn-primary px-4 py-2 rounded-xl text-xs font-semibold flex-shrink-0">
+            Modifier
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

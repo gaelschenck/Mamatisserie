@@ -1,0 +1,62 @@
+{% extends 'admin/base_admin.html.twig' %}
+{% block title %}Sous-catégories{% endblock %}
+
+{% block main %}
+
+<div class="flex items-center justify-between mb-6">
+    <h1 class="text-xl font-bold" style="color: var(--color-primary-dark);">🏷️ Sous-catégories</h1>
+    <a href="{{ path('admin_subcategory_new') }}"
+       class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold">
+        + Nouvelle sous-catégorie
+    </a>
+</div>
+
+{% if subCategories is empty %}
+<div class="text-center py-16 opacity-40 text-sm" style="color: var(--color-text);">
+    Aucune sous-catégorie.
+</div>
+{% else %}
+<div class="rounded-2xl border overflow-hidden" style="border-color: var(--color-secondary);">
+    <table class="w-full text-sm">
+        <thead style="background: var(--color-bg-alt);">
+            <tr class="text-left">
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Nom</th>
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Catégorie</th>
+                <th class="px-4 py-3 font-semibold" style="color: var(--color-text);">Visible</th>
+                <th class="px-4 py-3 font-semibold hidden sm:table-cell" style="color: var(--color-text);">Ordre</th>
+                <th class="px-4 py-3"></th>
+            </tr>
+        </thead>
+        <tbody class="divide-y" style="divide-color: var(--color-secondary);">
+            {% for sub in subCategories %}
+            <tr style="color: var(--color-text);">
+                <td class="px-4 py-3 font-medium">{{ sub.name }}</td>
+                <td class="px-4 py-3 opacity-60">{{ sub.category.name }}</td>
+                <td class="px-4 py-3">
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                                 {{ sub.isVisible ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600' }}">
+                        {{ sub.isVisible ? '✓ Oui' : '✗ Non' }}
+                    </span>
+                </td>
+                <td class="px-4 py-3 hidden sm:table-cell opacity-60">{{ sub.position }}</td>
+                <td class="px-4 py-3 text-right space-x-2 whitespace-nowrap">
+                    <a href="{{ path('admin_subcategory_edit', {id: sub.id}) }}"
+                       class="text-xs underline hover:opacity-70">Modifier</a>
+                    <form method="post"
+                          action="{{ path('admin_subcategory_delete', {id: sub.id}) }}"
+                          class="inline"
+                          onsubmit="return confirm('Supprimer « {{ sub.name }} » ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_subcategory_' ~ sub.id) }}">
+                        <button type="submit" class="text-xs text-red-500 underline hover:opacity-70">
+                            Supprimer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{# Affiche les erreurs globales du formulaire (niveau racine) #}
+{% set formErrors = [] %}
+{% for field in form %}
+    {% for error in field.vars.errors %}
+        {% set formErrors = formErrors|merge([error.message]) %}
+    {% endfor %}
+{% endfor %}
+
+{% if formErrors is not empty %}
+<div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 space-y-1">
+    <p class="font-semibold">Veuillez corriger les erreurs suivantes :</p>
+    <ul class="list-disc list-inside space-y-0.5">
+        {% for msg in formErrors %}
+        <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

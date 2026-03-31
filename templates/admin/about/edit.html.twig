@@ -1,0 +1,57 @@
+{% extends 'admin/base_admin.html.twig' %}
+{% block title %}À propos{% endblock %}
+
+{% block main %}
+
+<div class="mb-6">
+    <h1 class="text-xl font-bold" style="color: var(--color-primary-dark);">
+        👩‍🍳 Page "À propos"
+    </h1>
+    <p class="text-sm mt-1 opacity-50">Cette page est unique — les modifications sont directement publiées.</p>
+</div>
+
+<div class="max-w-2xl">
+    {{ form_start(form, {attr: {class: 'space-y-5', novalidate: 'novalidate', enctype: 'multipart/form-data'}}) }}
+
+        {% include 'admin/_form_errors.html.twig' %}
+
+        <div>
+            {{ form_label(form.title, null, {label_attr: {class: 'block text-sm font-medium mb-1'}}) }}
+            {{ form_widget(form.title, {attr: {class: 'w-full rounded-xl border px-4 py-3 text-sm outline-none', style: 'border-color: var(--color-secondary); background: var(--color-bg-alt); color: var(--color-text);'}}) }}
+            {{ form_errors(form.title) }}
+        </div>
+
+        <div>
+            {{ form_label(form.text, null, {label_attr: {class: 'block text-sm font-medium mb-1'}}) }}
+            {{ form_widget(form.text, {attr: {class: 'w-full rounded-xl border px-4 py-3 text-sm outline-none resize-none', style: 'border-color: var(--color-secondary); background: var(--color-bg-alt); color: var(--color-text);'}}) }}
+            {{ form_errors(form.text) }}
+        </div>
+
+        <div class="rounded-2xl border p-4" style="border-color: var(--color-secondary); background: var(--color-bg-alt);">
+            {{ form_label(form.photoFile, null, {label_attr: {class: 'block text-sm font-medium mb-3'}}) }}
+            {% if about.photo %}
+            <div class="mb-3">
+                <img src="/uploads/about/{{ about.photo }}" alt="{{ about.title }}"
+                     class="h-32 w-32 object-cover rounded-full border"
+                     style="border-color: var(--color-secondary);">
+            </div>
+            {% endif %}
+            {{ form_widget(form.photoFile) }}
+            {{ form_errors(form.photoFile) }}
+        </div>
+
+        <div class="flex gap-3 pt-2">
+            <button type="submit" class="btn-primary px-6 py-3 rounded-xl font-semibold text-sm">
+                Enregistrer
+            </button>
+            <a href="{{ path('app_about') }}" target="_blank"
+               class="px-6 py-3 rounded-xl text-sm border hover:opacity-70 transition-opacity"
+               style="border-color: var(--color-secondary); color: var(--color-text);">
+                Voir sur le site ↗
+            </a>
+        </div>
+
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}
