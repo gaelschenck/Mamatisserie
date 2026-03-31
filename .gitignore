@@ -9,6 +9,11 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+###> uploads & database ###
+/public/uploads/
+/node_modules/
+###< uploads & database ###
+
 ###> phpunit/phpunit ###
 /phpunit.xml
 /.phpunit.cache/

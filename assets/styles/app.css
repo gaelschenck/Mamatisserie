@@ -1,3 +1,93 @@
-body {
-    background-color: skyblue;
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+/* ============================================================
+   PALETTES DE COULEURS (thèmes via data-theme sur <html>)
+   ============================================================ */
+
+/* Thème par défaut : Lagune */
+:root, [data-theme="lagune"] {
+    --color-primary:     #00B4D8;
+    --color-primary-dark:#0077B6;
+    --color-secondary:   #90E0EF;
+    --color-bg:          #F0FBFF;
+    --color-surface:     #FFFFFF;
+    --color-text:        #0D1B2A;
+    --color-accent:      #CAF0F8;
 }
+
+[data-theme="boulangerie"] {
+    --color-primary:     #C8872A;
+    --color-primary-dark:#8B5E3C;
+    --color-secondary:   #E8B97A;
+    --color-bg:          #FDF3E3;
+    --color-surface:     #FFFFFF;
+    --color-text:        #2C1810;
+    --color-accent:      #F5DEB3;
+}
+
+[data-theme="chocolat"] {
+    --color-primary:     #6B3A2A;
+    --color-primary-dark:#3E1C00;
+    --color-secondary:   #A0522D;
+    --color-bg:          #FFF8F0;
+    --color-surface:     #FFFFFF;
+    --color-text:        #1A0800;
+    --color-accent:      #D4A843;
+}
+
+[data-theme="gourmande"] {
+    --color-primary:     #C0345A;
+    --color-primary-dark:#8B1A35;
+    --color-secondary:   #8DB87B;
+    --color-bg:          #FFF5F7;
+    --color-surface:     #FFFFFF;
+    --color-text:        #1A0A10;
+    --color-accent:      #C8E6C9;
+}
+
+/* ============================================================
+   UTILITAIRES THÈME
+   ============================================================ */
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    transition: background-color 0.2s ease;
+}
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.card {
+    background-color: var(--color-surface);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+}
+
+/* ============================================================
+   THEME SWITCHER (pastilles)
+   ============================================================ */
+
+.theme-switcher { display: flex; gap: 0.5rem; align-items: center; }
+.theme-dot {
+    width: 1.25rem; height: 1.25rem; border-radius: 50%;
+    cursor: pointer; border: 2px solid transparent;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+}
+.theme-dot:hover, .theme-dot.active {
+    border-color: var(--color-text);
+    transform: scale(1.2);
+}
+.theme-dot[data-theme="lagune"]      { background: #00B4D8; }
+.theme-dot[data-theme="boulangerie"] { background: #C8872A; }
+.theme-dot[data-theme="chocolat"]    { background: #6B3A2A; }
+.theme-dot[data-theme="gourmande"]   { background: #C0345A; }
+
