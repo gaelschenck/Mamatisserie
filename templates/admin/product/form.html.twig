@@ -32,15 +32,24 @@
         </div>
 
         {# Photo actuelle + upload #}
-        <div class="rounded-2xl border p-4" style="border-color: var(--color-secondary); background: var(--color-bg-alt);">
-            {{ form_label(form.photoFile, null, {label_attr: {class: 'block text-sm font-medium mb-3'}}) }}
+        <div class="rounded-2xl border p-5" style="border-color: var(--color-secondary); background: var(--color-bg-alt);">
+            <p class="text-sm font-medium mb-1" style="color: var(--color-text);">Photo</p>
+            <p class="text-xs mb-3 opacity-50" style="color: var(--color-text);">
+                Formats acceptés : JPEG, PNG, WebP — Taille max : 5 Mo
+            </p>
+
             {% if not isNew and product.photo %}
-            <div class="mb-3">
+            <div class="mb-4 flex items-center gap-4">
                 <img src="/uploads/products/{{ product.photo }}" alt="{{ product.name }}"
-                     class="h-32 w-32 object-cover rounded-xl border"
+                     class="h-24 w-24 object-cover rounded-xl border flex-shrink-0"
                      style="border-color: var(--color-secondary);">
+                <div class="text-xs opacity-50" style="color: var(--color-text);">
+                    Photo actuelle<br>
+                    (choisir une nouvelle photo pour la remplacer)
+                </div>
             </div>
             {% endif %}
+
             {{ form_widget(form.photoFile) }}
             {{ form_errors(form.photoFile) }}
         </div>
@@ -60,7 +69,16 @@
 
         {# Ordre d'affichage #}
         <div class="max-w-xs">
-            {{ form_label(form.displayOrder, null, {label_attr: {class: 'block text-sm font-medium mb-1'}}) }}
+            <div class="help-tooltip-wrap mb-1">
+                <span class="text-sm font-medium" style="color: var(--color-text);">Ordre d'affichage</span>
+                <button type="button" class="help-btn" aria-label="Aide">?</button>
+                <div class="help-tooltip" role="tooltip">
+                    Détermine l'ordre dans la galerie.<br>
+                    <strong>0</strong> = affiché en premier.<br>
+                    Les nombres plus élevés apparaissent après.
+                    Les produits avec le même numéro sont triés alphabétiquement.
+                </div>
+            </div>
             {{ form_widget(form.displayOrder, {attr: {class: 'w-full rounded-xl border px-4 py-3 text-sm outline-none', style: 'border-color: var(--color-secondary); background: var(--color-bg-alt); color: var(--color-text);'}}) }}
         </div>
 

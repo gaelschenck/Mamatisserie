@@ -27,15 +27,25 @@
             {{ form_errors(form.text) }}
         </div>
 
-        <div class="rounded-2xl border p-4" style="border-color: var(--color-secondary); background: var(--color-bg-alt);">
-            {{ form_label(form.photoFile, null, {label_attr: {class: 'block text-sm font-medium mb-3'}}) }}
+        <div class="rounded-2xl border p-5" style="border-color: var(--color-secondary); background: var(--color-bg-alt);">
+            <p class="text-sm font-medium mb-1" style="color: var(--color-text);">Photo de profil</p>
+            <p class="text-xs mb-3 opacity-50" style="color: var(--color-text);">
+                Formats acceptés : JPEG, PNG, WebP — Taille max : 5 Mo<br>
+                Conseil : photo carrée pour un meilleur rendu circulaire.
+            </p>
+
             {% if about.photo %}
-            <div class="mb-3">
+            <div class="mb-4 flex items-center gap-4">
                 <img src="/uploads/about/{{ about.photo }}" alt="{{ about.title }}"
-                     class="h-32 w-32 object-cover rounded-full border"
+                     class="h-24 w-24 object-cover rounded-full border flex-shrink-0"
                      style="border-color: var(--color-secondary);">
+                <div class="text-xs opacity-50" style="color: var(--color-text);">
+                    Photo actuelle<br>
+                    (choisir une nouvelle photo pour la remplacer)
+                </div>
             </div>
             {% endif %}
+
             {{ form_widget(form.photoFile) }}
             {{ form_errors(form.photoFile) }}
         </div>

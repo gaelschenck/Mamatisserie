@@ -157,5 +157,106 @@
     </div>
 </div>
 
+<style>
+/* ── Upload image ────────────────────────────────────────────── */
+.file-upload-wrap { position: relative; }
+.file-upload-wrap input[type="file"] {
+    position: absolute;
+    width: 1px; height: 1px;
+    opacity: 0; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap;
+}
+.file-upload-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 12px;
+    cursor: pointer; font-size: 14px; font-weight: 600;
+    background: var(--color-primary); color: #fff;
+    transition: opacity .2s; user-select: none;
+    border: none; text-decoration: none;
+}
+.file-upload-btn:hover { opacity: .85; }
+.file-upload-name {
+    display: block; margin-top: 6px;
+    font-size: 12px; opacity: .55;
+    word-break: break-all;
+}
+/* ── Tooltip "?" ─────────────────────────────────────────────── */
+.help-tooltip-wrap { position: relative; display: inline-flex; align-items: center; gap: 6px; }
+.help-btn {
+    width: 18px; height: 18px; border-radius: 50%;
+    font-size: 11px; font-weight: 700; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; border: none;
+    background: var(--color-secondary); color: var(--color-text);
+    opacity: .7; transition: opacity .15s;
+}
+.help-btn:hover { opacity: 1; }
+.help-tooltip {
+    display: none; position: absolute; left: 0; top: calc(100% + 6px);
+    z-index: 50; background: var(--color-primary-dark); color: #fff;
+    font-size: 12px; font-weight: 400; line-height: 1.5;
+    padding: 10px 14px; border-radius: 12px;
+    width: 240px; box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    pointer-events: none;
+}
+.help-tooltip.is-open { display: block; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ── Amélioration des inputs file ──────────────────────────────
+    document.querySelectorAll('input[type="file"]').forEach(function (input) {
+        // Ajout accept pour iPhone (accès galerie + caméra)
+        input.setAttribute('accept', 'image/jpeg,image/png,image/webp');
+
+        // Wrap
+        const wrap = document.createElement('div');
+        wrap.className = 'file-upload-wrap';
+        input.parentNode.insertBefore(wrap, input);
+        wrap.appendChild(input);
+
+        // Bouton
+        const btn = document.createElement('label');
+        btn.setAttribute('for', input.id);
+        btn.className = 'file-upload-btn';
+        btn.innerHTML = '📷&nbsp;Choisir une photo';
+        wrap.insertBefore(btn, input);
+
+        // Nom du fichier sélectionné
+        const nameEl = document.createElement('span');
+        nameEl.className = 'file-upload-name';
+        nameEl.textContent = 'Aucun fichier sélectionné';
+        wrap.appendChild(nameEl);
+
+        input.addEventListener('change', function () {
+            if (input.files && input.files[0]) {
+                nameEl.textContent = input.files[0].name;
+                btn.innerHTML = '🔄&nbsp;Changer la photo';
+            } else {
+                nameEl.textContent = 'Aucun fichier sélectionné';
+                btn.innerHTML = '📷&nbsp;Choisir une photo';
+            }
+        });
+    });
+
+    // ── Tooltip ───────────────────────────────────────────────────
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.help-btn');
+        if (btn) {
+            e.stopPropagation();
+            const tooltip = btn.nextElementSibling;
+            const wasOpen = tooltip.classList.contains('is-open');
+            document.querySelectorAll('.help-tooltip.is-open').forEach(t => t.classList.remove('is-open'));
+            if (!wasOpen) tooltip.classList.add('is-open');
+            return;
+        }
+        // Ferme tous si clic ailleurs
+        document.querySelectorAll('.help-tooltip.is-open').forEach(t => t.classList.remove('is-open'));
+    });
+
+});
+</script>
+
 </body>
 </html>
