@@ -11,30 +11,34 @@
 
     {% if about %}
 
-    {# ── Photo + texte ─────────────────────────────────────── #}
-    <div class="flex flex-col md:flex-row gap-10 items-center md:items-start">
+    {# ── Photo gauche / texte droite — empilé sur mobile ── #}
+    <div class="flex flex-col md:flex-row gap-10 md:gap-14 items-start">
 
+        {# Photo — en haut sur mobile, à gauche sur desktop #}
         {% if about.photo %}
-        <div class="w-56 h-56 md:w-72 md:h-72 flex-shrink-0 rounded-full overflow-hidden shadow-lg ring-4"
-             style="ring-color: var(--color-secondary);">
-            <img src="/uploads/about/{{ about.photo }}"
-                 alt="{{ about.title }}"
-                 class="w-full h-full object-cover">
+        <div class="w-full md:w-72 flex-shrink-0">
+            <div class="aspect-square w-56 md:w-72 mx-auto md:mx-0 rounded-2xl overflow-hidden shadow-md"
+                 style="outline: 3px solid var(--color-secondary); outline-offset: 4px;">
+                <img src="/uploads/about/{{ about.photo }}"
+                     alt="{{ about.title }}"
+                     class="w-full h-full object-cover">
+            </div>
         </div>
         {% endif %}
 
-        <div class="flex-1">
-            <h1 class="text-3xl font-bold mb-4" style="color: var(--color-primary-dark);">
+        {# Texte — en bas sur mobile, à droite sur desktop #}
+        <div class="flex-1 min-w-0">
+            <h1 class="text-3xl font-bold mb-5" style="color: var(--color-primary-dark);">
                 {{ about.title }}
             </h1>
-            <div class="prose max-w-none leading-relaxed text-base"
+            <div class="leading-relaxed text-base space-y-3"
                  style="color: var(--color-text);">
                 {{ about.text | nl2br }}
             </div>
 
             <a href="{{ path('app_contact') }}"
                class="btn-primary inline-block mt-8 px-6 py-3 rounded-full font-medium transition-all hover:opacity-90">
-                ✉️ Me contacter
+                Me contacter
             </a>
         </div>
 
@@ -43,7 +47,6 @@
     {% else %}
 
     <div class="text-center py-24 opacity-40" style="color: var(--color-text);">
-        <p class="text-5xl mb-4">👩‍🍳</p>
         <p>Page en cours de construction.</p>
     </div>
 

@@ -17,14 +17,26 @@
 
         <section>
             <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
-                Éditeur du site
+                Présentation du site
             </h2>
             <p>
-                Ce site est édité par Chloé [NOM DE FAMILLE],<br>
-                artisane pâtissière-chocolatière indépendante.<br>
-                Adresse : [ADRESSE]<br>
+                Ce site est un portfolio personnel réalisé dans le cadre d'une formation en pâtisserie
+                et chocolaterie. Il a pour vocation de présenter les créations et le parcours de son autrice,
+                Chloé [NOM DE FAMILLE], étudiante en [NOM DE LA FORMATION / ÉCOLE].<br>
+                Ce site n'est pas un site commercial : aucun produit n'est vendu en ligne.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
+                Contact
+            </h2>
+            <p>
                 E-mail : [EMAIL DE CONTACT]<br>
-                Siret : [NUMÉRO SIRET]
+                Pour toute demande, utilisez le
+                <a href="{{ path('app_contact') }}"
+                   class="underline hover:opacity-70"
+                   style="color: var(--color-primary);">formulaire de contact</a>.
             </p>
         </section>
 
@@ -44,8 +56,8 @@
                 Propriété intellectuelle
             </h2>
             <p>
-                Toutes les photographies, textes et créations présentés sur ce site sont la propriété exclusive
-                de leur autrice. Toute reproduction, même partielle, est interdite sans autorisation préalable.
+                Toutes les photographies et créations présentées sur ce site sont la propriété de
+                leur autrice. Elles ne peuvent être reproduites sans son autorisation préalable.
             </p>
         </section>
 
@@ -55,25 +67,14 @@
             </h2>
             <p>
                 Les informations transmises via le formulaire de contact sont utilisées uniquement pour
-                répondre à votre demande et ne sont pas conservées au-delà de cette finalité.
-                Aucun fichier client n'est constitué. Aucun cookie de tracking n'est déposé.
+                répondre à votre demande. Elles ne sont ni conservées ni transmises à des tiers.
+                Aucun cookie de tracking n'est déposé.
             </p>
             <p class="mt-2">
-                Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et
-                de suppression de vos données. Pour l'exercer, contactez :
+                Conformément au RGPD, vous pouvez demander la suppression de vos données via
                 <a href="{{ path('app_contact') }}"
                    class="underline hover:opacity-70"
                    style="color: var(--color-primary);">le formulaire de contact</a>.
-            </p>
-        </section>
-
-        <section>
-            <h2 class="text-lg font-semibold mb-2" style="color: var(--color-primary-dark);">
-                Cookies
-            </h2>
-            <p>
-                Ce site utilise un seul cookie de préférence locale (thème visuel choisi par l'utilisateur).
-                Ce cookie ne contient aucune donnée personnelle et n'est pas transmis à des tiers.
             </p>
         </section>
 
