@@ -20,6 +20,8 @@ jobs:
           extensions: pdo_sqlite, sqlite3, intl, mbstring, openssl, curl, xml
 
       - name: Install Composer dependencies (prod)
+        env:
+          APP_ENV: prod
         run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Setup Node.js
