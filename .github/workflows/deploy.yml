@@ -50,9 +50,7 @@ jobs:
             -e "ssh -p 2222 -i ~/.ssh/id_ed25519" \
             --exclude='.git' \
             --exclude='.env.local' \
-            --exclude='var/cache' \
-            --exclude='var/log' \
-            --exclude='var/*.db' \
+            --exclude='var/' \
             --exclude='node_modules' \
             ./ "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}"
 
