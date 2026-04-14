@@ -1,0 +1,65 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Déploiement sur VM Freebox
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_sqlite, sqlite3, intl, mbstring, openssl, curl, xml
+
+      - name: Install Composer dependencies (prod)
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Build assets (Tailwind CSS)
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configurer SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p 2222 -H "${{ secrets.REMOTE_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Déploiement via rsync
+        run: |
+          rsync -azP --delete \
+            -e "ssh -p 2222 -i ~/.ssh/id_ed25519" \
+            --exclude='.git' \
+            --exclude='.env.local' \
+            --exclude='var/cache' \
+            --exclude='var/log' \
+            --exclude='var/*.db' \
+            --exclude='node_modules' \
+            ./ "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}"
+
+      - name: Migrations et cache (prod)
+        run: |
+          ssh -p 2222 -i ~/.ssh/id_ed25519 "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}" bash << 'EOF'
+            set -e
+            cd ${{ secrets.REMOTE_PATH }}
+            php bin/console doctrine:migrations:migrate --no-interaction --env=prod
+            php bin/console cache:clear --env=prod
+            php bin/console cache:warmup --env=prod
+          EOF

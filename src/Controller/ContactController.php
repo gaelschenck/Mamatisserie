@@ -57,8 +57,8 @@ class ContactController extends AbstractController
                         : $subject;
 
                     $mail = (new Email())
-                        ->from($contactEmail)
-                        ->replyTo($email)
+                        ->from(sprintf('Les Délices de Chloé <chloeberard81@gmail.com>'))
+                        ->replyTo(sprintf('%s <%s>', $name, $email))
                         ->to($contactEmail)
                         ->subject($emailSubject)
                         ->html(sprintf(
