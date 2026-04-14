@@ -1,0 +1,57 @@
+# Use the front controller as index file. It serves as a fallback solution when
+# every other rewrite/redirect fails (e.g. in an aliased environment without
+# mod_rewrite). Additionally, this reduces the matching process for the
+# start page (path "/") that is not repressed by the rewrite rules below.
+DirectoryIndex index.php
+
+# By default, Apache does not evaluate symbolic links if you did not enable this
+# temporary workaround.
+# Uncomment the following line if you install assets as symlinks or if you experience
+# temporary redirects that are fixed when you empty the browser cache:
+#Options +FollowSymlinks
+
+# Disabling MultiViews prevents unwanted negotiation, e.g. "/index" should not resolve
+# to the front controller "/index.php" but be rewritten to "/index.php/index".
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Determine the RewriteBase automatically and set it as environment variable.
+    # If you are using Apache aliases or something similar, chances are that the
+    # temporary URL is different from the real one. Since we can't auto-detect
+    # the RewriteBase, please uncomment the following line and correct the path
+    # accordingly:
+    #
+    #   RewriteBase /
+
+    # Sets the HTTP_AUTHORIZATION header removed by Apache
+    RewriteCond %{HTTP:Authorization} .+
+    RewriteRule ^ - [E=HTTP_AUTHORIZATION:%0]
+
+    # Redirect to URI without front controller to prevent duplicate URIs (with and
+    # without `/index.php`). Only do this redirect on the initial rewrite by Apache
+    # and not on subsequent cycles.
+    RewriteCond %{ENV:REDIRECT_STATUS} =""
+    RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+
+    # If the requested filename exists, simply serve it.
+    # We only want to let Apache serve files and not directories.
+    # Rewrite all other queries to the front controller.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ %{ENV:BASE}/index.php [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    <IfModule mod_alias.c>
+        # When mod_rewrite is not available, we instruct a temporary redirect of
+        # the start page to the front controller explicitly so that the
+        # temporary URL is not cached permanently by the browser.
+        # Make sure that the index.php front controller is accessible.
+        # For example, in some environments, not all PHP files are allowed to be executed.
+        RedirectMatch 307 ^/$ /index.php/
+        # RedirectMatch 307 ^/$ /index.php/homepage
+    </IfModule>
+</IfModule>
