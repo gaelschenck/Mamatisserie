@@ -56,7 +56,7 @@ jobs:
             --exclude='node_modules' \
             ./ "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}"
 
-      - name: Migrations et cache (prod)
+      - name: Migrations, cache et permissions (prod)
         run: |
           ssh -p 2222 -i ~/.ssh/id_ed25519 "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}" bash << 'EOF'
             set -e
@@ -64,4 +64,6 @@ jobs:
             php bin/console doctrine:migrations:migrate --no-interaction --env=prod
             php bin/console cache:clear --env=prod
             php bin/console cache:warmup --env=prod
+            sudo chown -R www-data:www-data var/
+            sudo chmod -R 775 var/
           EOF
