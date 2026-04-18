@@ -42,12 +42,20 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -p 2222 -H "${{ secrets.REMOTE_HOST }}" >> ~/.ssh/known_hosts
+          ssh-keyscan -p 22 -H "${{ secrets.REMOTE_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Écrire .env.local sur le serveur
+        env:
+          ENV_LOCAL: ${{ secrets.ENV_LOCAL }}
+        run: |
+          echo "$ENV_LOCAL" | ssh -p 22 -i ~/.ssh/id_ed25519 \
+            "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}" \
+            "cat > ${{ secrets.REMOTE_PATH }}/.env.local"
 
       - name: Déploiement via rsync
         run: |
           rsync -azP --delete \
-            -e "ssh -p 2222 -i ~/.ssh/id_ed25519" \
+            -e "ssh -p 22 -i ~/.ssh/id_ed25519" \
             --exclude='.git' \
             --exclude='.env.local' \
             --exclude='var/' \
@@ -56,7 +64,7 @@ jobs:
 
       - name: Migrations, cache et permissions (prod)
         run: |
-          ssh -p 2222 -i ~/.ssh/id_ed25519 "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}" bash << 'EOF'
+          ssh -p 22 -i ~/.ssh/id_ed25519 "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}" bash << 'EOF'
             set -e
             cd ${{ secrets.REMOTE_PATH }}
             php bin/console doctrine:migrations:migrate --no-interaction --env=prod
